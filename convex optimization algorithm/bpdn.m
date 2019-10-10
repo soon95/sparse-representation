@@ -14,6 +14,6 @@ function [ x ] = bpdn( y,A,lamda )
     c = lamda*ones(2*n,1)+[-b;b];
     B = [A'*A,-A'*A;-A'*A,A'*A];
     lb = zeros(2*n,1);
-    z0 = quadprog(B,c,[],[],[],[],lb);
+    z0 = quadprog(B,c,[],[],[],[],lb); % 中间四个参数分别是不等于约束和等于约束：A*x<b,A'*x=b'的参数，最后两个参数是参数范围约束，这里要求结果都不小于零
     x = z0(1:n) - z0(n+1:2*n);
 end
