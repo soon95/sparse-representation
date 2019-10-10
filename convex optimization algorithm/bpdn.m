@@ -1,10 +1,9 @@
 function [ x ] = bpdn( y,A,lamda )
-%BPDN_quadprog(Basis Pursuit DeNoising with quadprog) Summary of this function goes here
-%Version: 1.0 written by jbb0523 @2016-07-22 
-%Reference:Nowak R D, Wright S J. Gradient projection for sparse reconstruction:
-%Application to compressed sensing and other inverse problems[J]. 
-%IEEE Journal of selected topics in signal processing, 2007, 1(4): 586-597.
-%(Available at: http://pages.cs.wisc.edu/~swright/papers/FigNW07a.pdf)
+%bpdn 迭代阈值收缩算法
+%   输入参数：
+%     y:输入信号
+%     A:字典
+%     lamda:乘子
     [y_rows,y_columns] = size(y);  
     if y_rows<y_columns  
         y = y';%y should be a column vector  
