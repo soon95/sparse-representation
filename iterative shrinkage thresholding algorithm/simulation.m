@@ -50,7 +50,7 @@ end
 % plot(t,sig);
 
 %% 加入噪声
-SNR=10;
+SNR=-3;
 [signal,noise]=noisegen(sig,SNR);
 
 figure()
@@ -76,10 +76,13 @@ zeta_max=0.051;              %(需要根据实际情况调整)
 W_step=4;
 [Dic,rows,cols]=dic(len,f_min,f_max,zeta_min,zeta_max,W_step,fs);
 Dic=dictnormalize(Dic);
+%% 在进行阈值迭代收缩算法时，需要将字典的矩阵二范数归一化成1；而在其他算法中通常的做法是原子归一化，虽然这样做只是为了好看，但是在阈值迭代收缩算法中由于使用到了majorization-minimization框架，因此对字典尺度有硬性的要求。
+% 这个问题困扰了我好久，是重推公式的时候才发现的
+Dic=Dic/norm(Dic); 
 %% 稀疏恢复 
 
 maxIter=1000;           %迭代次数
-maxErr=1e-1;
+maxErr=1e-2;
 ts=3;               %极限系数
 distance=5;         %聚类距离尺度，需要着重设置
 
@@ -89,7 +92,7 @@ distance=5;         %聚类距离尺度，需要着重设置
 % sig_recovery=Dic*theta;
 
 % ist
-sigma = 0.5;
+sigma = 0.02;
 lamda = sigma*sqrt(2*log(len));
 theta=ist(signal,Dic,lamda,maxErr,maxIter);
 sig_recovery=Dic*theta;
