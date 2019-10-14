@@ -50,7 +50,7 @@ end
 % plot(t,sig);
 
 %% 加入噪声
-SNR=-5;
+SNR=-3;
 [signal,noise]=noisegen(sig,SNR);
 
 figure()
@@ -94,11 +94,19 @@ distance=5;         %聚类距离尺度，需要着重设置
 % ist
 sigma = 0.05;
 lamda = sigma*sqrt(2*log(len));
-theta=ist(signal,Dic,lamda,maxErr,maxIter);
-sig_recovery=Dic*theta;
 
+
+% theta=ist(signal,Dic,lamda,maxErr,maxIter);
+% sig_recovery=Dic*theta;
+% 
+% figure();
+% plot(t,sig_recovery);
+
+
+% iht 初步判断iht效果没有ist好，应该是软阈值函数的作用
+theta=iht(signal,Dic,lamda,maxErr,maxIter);
+sig_recovery=Dic*theta;
 
 figure();
 plot(t,sig_recovery);
-
 

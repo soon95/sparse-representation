@@ -1,5 +1,5 @@
-function [ x ] = ist( y,A,lamda,maxErr,maxIter )
-%IST 迭代阈值收缩算法 软阈值 处理一范数问题
+function [ x ] = iht( y,A,lamda,maxErr,maxIter )
+%IHT 迭代阈值收缩算法 硬阈值 处理零范数问题
 %   输入参数：
 %     y:输入信号
 %     A:字典
@@ -20,20 +20,19 @@ function [ x ] = ist( y,A,lamda,maxErr,maxIter )
     if y_rows<y_columns      
         y = y';%y should be a column vector      
     end 
-    %soft = @(x,T) sign(x).*max(abs(x) - T,0);
     n = size(A,2);    
     x = zeros(n,1);%Initialize x=0  
-    f = 0.5*(y-A*x)'*(y-A*x)+lamda*sum(abs(x));%added in v1.1
+    f = 0.5*(y-A*x)'*(y-A*x)+lamda*sum(abs(x));
     iter = 0; 
     while 1    
         x_pre = x;
-        x = soft_threshold(x + A'*(y-A*x),lamda);%update x        
+        x=hard_threshold(x + A'*(y-A*x),lamda); %update x          
         iter = iter + 1;  
-        f_pre = f;%added in v1.1
-        f = 0.5*(y-A*x)'*(y-A*x)+lamda*sum(abs(x));%added in v1.1
-        if abs(f-f_pre)/f_pre<maxErr%modified in v1.1
+        f_pre = f;
+        f = 0.5*(y-A*x)'*(y-A*x)+lamda*sum(abs(x));
+        if abs(f-f_pre)/f_pre<maxErr
             fprintf('abs(f-f_pre)/f_pre<%f\n',maxErr);
-            fprintf('IST loop is %d\n',iter);
+            fprintf('IHT loop is %d\n',iter);
             break;
         end
         if iter >= maxIter
@@ -42,13 +41,15 @@ function [ x ] = ist( y,A,lamda,maxErr,maxIter )
         end
         if norm(x-x_pre)<maxErr
             fprintf('norm(x-x_pre)<%f\n',maxErr);
-            fprintf('IST loop is %d\n',iter);
+            fprintf('IHT loop is %d\n',iter);
             break;
         end
     end  
 end
 
-%% 软阈值函数
-function [ x ]=soft_threshold(b,lamda)
-    x=sign(b).*max(abs(b) - lamda,0);
+%% 硬阈值函数
+function [ x ]=hard_threshold(b,lamda)
+    sel=(abs(b)>sqrt(lamda));
+    x=b.*sel;
 end
+
