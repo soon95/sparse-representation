@@ -50,7 +50,7 @@ end
 % plot(t,sig);
 
 %% 加入噪声
-SNR=-3;
+SNR=-5;
 [signal,noise]=noisegen(sig,SNR);
 
 figure()
@@ -92,10 +92,8 @@ distance=5;         %聚类距离尺度，需要着重设置
 % sig_recovery=Dic*theta;
 
 % ist
-sigma = 0.05;
-lamda = sigma*sqrt(2*log(len));
-
-
+% sigma = 0.05;
+% lamda = sigma*sqrt(2*log(len));
 % theta=ist(signal,Dic,lamda,maxErr,maxIter);
 % sig_recovery=Dic*theta;
 % 
@@ -104,9 +102,20 @@ lamda = sigma*sqrt(2*log(len));
 
 
 % iht 初步判断iht效果没有ist好，应该是软阈值函数的作用
-theta=iht(signal,Dic,lamda,maxErr,maxIter);
+% theta=iht(signal,Dic,lamda,maxErr,maxIter);
+% sig_recovery=Dic*theta;
+% 
+% figure();
+% plot(t,sig_recovery);
+
+% ixt 新的改进的迭代阈值算法
+sigma = 0.1;
+lamda = sigma*sqrt(2*log(len));
+theta=ixt(signal,Dic,lamda,maxErr,maxIter);
 sig_recovery=Dic*theta;
 
 figure();
 plot(t,sig_recovery);
+
+
 
