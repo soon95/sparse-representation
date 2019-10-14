@@ -1,5 +1,5 @@
 clc;clear all;close all;
-%% StOMP算法性能 仿真信号分析
+%% 测试用
 
 fs=2000;                %采样频率
 total_time=1;           %采样时间
@@ -46,11 +46,8 @@ for i=1:len/(T*fs)
     count=count+1;
 end
 
-% figure();
-% plot(t,sig);
-
 %% 加入噪声
-SNR=-5;
+SNR=-3;
 [signal,noise]=noisegen(sig,SNR);
 
 figure()
@@ -63,42 +60,48 @@ ylim([-1,1]);
 
 subplot(2,1,2);
 plot(t,signal);
-title('无噪仿真信号');
+title('仿真信号');
 xlabel('时间 t/s');
 ylabel('幅值 A(m/s^2)');
 ylim([-1,1]);
 
-%% 构造字典
-f_min=299;                  %(需要根据实际情况调整)
-f_max=301;                  %(需要根据实际情况调整)
-zeta_min=0.049;              %(需要根据实际情况调整)
-zeta_max=0.051;              %(需要根据实际情况调整)
-W_step=4;
-[Dic,rows,cols]=dic(len,f_min,f_max,zeta_min,zeta_max,W_step,fs);
-Dic=dictnormalize(Dic);
-%% 在进行阈值迭代收缩算法时，需要将字典的矩阵二范数归一化成1；而在其他算法中通常的做法是原子归一化，虽然这样做只是为了好看，但是在阈值迭代收缩算法中由于使用到了majorization-minimization框架，因此对字典尺度有硬性的要求。
-% 这个问题困扰了我好久，是重推公式的时候才发现的
-Dic=Dic/norm(Dic); 
-%% 稀疏恢复 
+%%
+fouriorTransform(signal,fs,1);
 
-maxIter=1000;           %迭代次数
-maxErr=1e-2;
-ts=3;               %极限系数
-distance=5;         %聚类距离尺度，需要着重设置
+%% 短时傅里叶
+figure()
+WINDOW = 128;
+NOVERLAP = 120;
+NFFT = 256;
+% MINDB = 20;
+% [B, F, T, P] = spectrogram(signal,WINDOW,NOVERLAP,NFFT,fs);
+% imagesc(T,F,abs(B));
+% set(gca,'YDir','normal')
+% colorbar;
+% xlabel('时间 t/s');
+% ylabel('频率 f/Hz');
+% title('短时傅里叶时频图');
 
-% bpdn
-
-% theta=bpdn(signal,Dic,lamda);
-% sig_recovery=Dic*theta;
-
-% ist
-sigma = 0.05;
-lamda = sigma*sqrt(2*log(len));
-theta=ist(signal,Dic,lamda,maxErr,maxIter);
-sig_recovery=Dic*theta;
+time_frequency_transform_sfft(signal,WINDOW,NOVERLAP,NFFT,fs,1);
 
 
-figure();
-plot(t,sig_recovery);
+%% 小波 时频图
+% totalscal=256;
+% wavename='cmor3-3';
+% Fc=centfrq(wavename); % 小波的中心频率  测得Fc = 3
+% c=2*Fc*totalscal;    % 测得c = 1536
+% scals=c./(1:totalscal);
+% f=scal2frq(scals,wavename,1/fs); % 将尺度转换为频率
+% coefs = cwt(signal,scals,wavename); % 求连续小波系数
+% t=0:1/fs:size(signal)/fs;
+% figure()
+% imagesc(t,f,abs(coefs));
+% set(gca,'YDir','normal')
+% colorbar;
+% xlabel('时间 t/s');
+% ylabel('频率 f/Hz');
+% title('小波时频图');
+
+time_frequency_transform_wavelet(signal,256,fs,1);
 
 
