@@ -53,20 +53,20 @@ end
 SNR=-3;
 [signal,noise]=noisegen(sig,SNR);
 
-figure()
-subplot(2,1,1);
-plot(t,sig);
-title('无噪仿真信号');
-xlabel('时间 t/s');
-ylabel('幅值 A(m/s^2)');
-ylim([-1,1]);
-
-subplot(2,1,2);
-plot(t,signal);
-title('无噪仿真信号');
-xlabel('时间 t/s');
-ylabel('幅值 A(m/s^2)');
-ylim([-1,1]);
+% figure()
+% subplot(2,1,1);
+% plot(t,sig);
+% title('无噪仿真信号');
+% xlabel('时间 t/s');
+% ylabel('幅值 A(m/s^2)');
+% ylim([-1,1]);
+% 
+% subplot(2,1,2);
+% plot(t,signal);
+% title('无噪仿真信号');
+% xlabel('时间 t/s');
+% ylabel('幅值 A(m/s^2)');
+% ylim([-1,1]);
 
 %% 构造字典
 f_min=299;                  %(需要根据实际情况调整)
@@ -119,12 +119,12 @@ plot(t,sig_recovery);
 
 
 % gist
-sigma = 0.025;
-lamda = sigma*sqrt(2*log(len));
-theta=gist(signal,Dic,lamda);
-sig_recovery=Dic*theta;
-
-figure();
-plot(t,sig_recovery);
+% sigma = 0.025;
+% lamda = sigma*sqrt(2*log(len));
+% theta=gist(signal,Dic,lamda);
+% sig_recovery=Dic*theta;
+% 
+% figure();
+% plot(t,sig_recovery);
 
 

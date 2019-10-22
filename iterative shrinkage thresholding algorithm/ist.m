@@ -27,7 +27,19 @@ function [ x ] = ist( y,A,lamda,maxErr,maxIter )
     iter = 0; 
     while 1    
         x_pre = x;
-        x = soft_threshold(x + A'*(y-A*x),lamda);%update x        
+        B=x + A'*(y-A*x);
+        x = soft_threshold(B,lamda);%update x    
+        
+        figure();
+        subplot(3,1,1);
+        plot(x_pre);
+        subplot(3,1,2);
+        plot(x);
+        subplot(3,1,3);
+        plot(B);
+        
+        
+        
         iter = iter + 1;  
         f_pre = f;%added in v1.1
         f = 0.5*(y-A*x)'*(y-A*x)+lamda*sum(abs(x));%added in v1.1
