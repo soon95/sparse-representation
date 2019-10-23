@@ -83,7 +83,7 @@ ts=3;               %极限系数
 distance=5;         %聚类距离尺度，需要着重设置
 
 % bpdn
-sigma = 0.01;
+sigma = 0.02;
 lamda = sigma*sqrt(2*log(len));
 theta=bpdn(signal,Dic,lamda);
 sig_recovery=Dic*theta;
@@ -91,4 +91,11 @@ sig_recovery=Dic*theta;
 figure();
 plot(t,sig_recovery);
 
+% wbpdn
+sigma = 0.03;
+lamda = sigma*sqrt(2*log(len));
+theta=Wbpdn(signal,Dic,lamda);
+sig_recovery=Dic*theta;
 
+figure();
+plot(t,sig_recovery);

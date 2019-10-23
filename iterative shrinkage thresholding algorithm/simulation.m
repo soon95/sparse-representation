@@ -1,4 +1,4 @@
-clc;clear all;close all;
+ clc;clear all;close all;
 %% StOMP算法性能 仿真信号分析
 
 fs=2000;                %采样频率
