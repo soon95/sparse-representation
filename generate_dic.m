@@ -1,4 +1,4 @@
-function [A,rows,cols]=dic(N,f_min,f_max,zeta_min,zeta_max,W_step,fs)
+function [A,rows,cols]=generate_dic(N,f_min,f_max,zeta_min,zeta_max,W_step,fs)
 % fs=10240;         %采样频率
 t=1:N;          %时间长度为10s
 rows=length(t); %字典的行数

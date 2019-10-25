@@ -30,14 +30,15 @@ function [ x ] = ist( y,A,lamda,maxErr,maxIter )
         B=x + A'*(y-A*x);
         x = soft_threshold(B,lamda);%update x    
         
-        figure();
-        subplot(3,1,1);
-        plot(x_pre);
-        subplot(3,1,2);
-        plot(x);
-        subplot(3,1,3);
-        plot(B);
-        
+        %% 查看迭代中变化情况
+%         figure();
+%         subplot(3,1,1);
+%         plot(x_pre);
+%         subplot(3,1,2);
+%         plot(x);
+%         subplot(3,1,3);
+%         plot(B);
+        %%
         
         
         iter = iter + 1;  
