@@ -72,26 +72,3 @@ end
 function [ x ]=soft_threshold(b,lamda,w)
     x=sign(b).*max(abs(b) - lamda*w,0);
 end
-
-%% 权值函数
-function W=weight(y,dic)
-    
-    % 字典dic为dic_rows*dic_cols矩阵,信号长度为dic_rows,原子个数为dic_cols
-    [dic_rows,dic_cols]=size(dic);
-    
-    %% 加权方法需要探讨
-    % 方案一：采用相关系数，及余弦夹角
-    inner_product=1./abs(y'*dic);
-    c=inner_product;
-    % 方案二：采用峭度指标
-    
-    
-    
-    
-    % 归一化方法需要探讨
-    % c=zscore(inner_product)+1;
-    c=mapminmax(c,0,1);
-    
-    W=diag(c);
-    
-end

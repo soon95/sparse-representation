@@ -5,6 +5,7 @@ rows=length(t); %字典的行数
 A1=1;           %有效信号幅值
 A=[];
 %Wss=round(T*fs);
+support_len=200;    % 支撑区间
 l1=0;
 for Wss=0:W_step:N-1
     l1=l1+1;
@@ -16,7 +17,7 @@ for Wss=0:W_step:N-1
            l3=l3+1;
          sig1=exp(-(zeta0/sqrt(1-zeta0^2))*2*pi*f0*(t/fs)).*sin(2*pi*f0*(t/fs));
           for k=1:N
-               if k<=Wss
+               if k<=Wss||k>=Wss+support_len
                    sig2(k)=0;
                else
                    sig2(k)=sig1(k-Wss);
