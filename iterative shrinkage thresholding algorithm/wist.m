@@ -27,13 +27,14 @@ function [ x ] = wist( y,dic,lamda,maxErr,maxIter )
     x = zeros(dic_cols,1);%Initialize x=0  
     f = 0.5*(y-dic*x)'*(y-dic*x)+lamda*sum(abs(x));%added in v1.1
     iter = 0; 
+    
+     % 加权项
+    W=weight(y,dic);
+    w=W*ones(dic_cols,1);
+
     while 1    
         x_pre = x;
         B=x + dic'*(y-dic*x);
-        
-        % 加权项
-        W=weight(y,dic);
-        w=W*ones(dic_cols,1);
         
         x = soft_threshold(B,lamda,w);%update x    
         

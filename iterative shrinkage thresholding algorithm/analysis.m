@@ -1,4 +1,4 @@
- clc;clear all;close all;
+clc;clear all;close all;
 %% StOMP算法性能 仿真信号分析
 
 fs=2000;                %采样频率
@@ -50,8 +50,8 @@ end
 % plot(t,sig);
 
 %% 加入噪声
-SNR=-7;
-[signal,noise]=noisegen(sig,SNR);
+SNR=-5;
+
 
 % figure()
 % subplot(2,1,1);
@@ -76,65 +76,35 @@ zeta_max=0.051;              %(需要根据实际情况调整)
 W_step=4;
 [Dic,rows,cols]=generate_dic(len,f_min,f_max,zeta_min,zeta_max,W_step,fs);
 Dic=dictnormalize(Dic);
-%% 在进行阈值迭代收缩算法时，需要将字典的矩阵二范数归一化成1；而在其他算法中通常的做法是原子归一化，虽然这样做只是为了好看，但是在阈值迭代收缩算法中由于使用到了majorization-minimization框架，因此对字典尺度有硬性的要求。
-% 这个问题困扰了我好久，是重推公式的时候才发现的
 Dic=Dic/norm(Dic); 
-%% 稀疏恢复 
-
-maxIter=1000;           %迭代次数
-maxErr=1e-2;
-ts=3;               %极限系数
-distance=5;         %聚类距离尺度，需要着重设置
- 
-% bpdn
-
-% theta=bpdn(signal,Dic,lamda);
-% sig_recovery=Dic*theta;
-
-% ist
-sigma = 0.05;
-lamda = sigma*sqrt(2*log(len));
-theta=ist(signal,Dic,lamda,maxErr,maxIter);
-sig_recovery=Dic*theta;
-
-figure();
-plot(t,sig_recovery);
 
 
-% iht 初步判断iht效果没有ist好，应该是软阈值函数的作用
-% theta=iht(signal,Dic,lamda,maxErr,maxIter);
-% sig_recovery=Dic*theta;
-% 
-% figure();
-% plot(t,sig_recovery);
 
-% ixt 新的改进的迭代阈值算法
-% sigma = 0.1;
-% lamda = sigma*sqrt(2*log(len));
-% theta=ixt(signal,Dic,lamda,maxErr,maxIter);
-% sig_recovery=Dic*theta;
-% 
-% figure();
-% plot(t,sig_recovery);
+%% 稀疏恢复算法
 
+cc=[];
+ex_num=50;
+range=0.01:0.0025:0.06;
+% bpdn算法实在是太慢了，放弃
+% 用ist
 
-% gist
-% sigma = 0.025;
-% lamda = sigma*sqrt(2*log(len));
-% theta=gist(signal,Dic,lamda);
-% sig_recovery=Dic*theta;
-% 
-% figure();
-% plot(t,sig_recovery);
-
-
-% wist
-sigma = 0.06;
-lamda = sigma*sqrt(2*log(len));
-theta=wist(signal,Dic,lamda,maxErr,maxIter);
-sig_recovery=Dic*theta;
-
-figure();
-plot(t,sig_recovery);
+for sigma=range
+    lamda=sigma*sqrt(2*log(cols));
+    
+    temp=[];
+    for i=1:ex_num
+        [signal,noise]=noisegen(sig,SNR);
+        theta=ist(signal,Dic,lamda);
+        sig_recovery=Dic*theta;
+        % 相关系数
+        r=corrcoef(sig,sig_recovery);
+        temp=[temp r(1,2)];
+        
+    end
+    % 取均值
+    cc=[cc mean(temp)];
+end
 
 
+figure()
+plot(range,cc);

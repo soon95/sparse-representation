@@ -17,7 +17,12 @@ function [ W ] = weight( y,dic )
     
     % 归一化方法需要探讨
     % c=zscore(inner_product)+1;
-    c=mapminmax(c,0,1);
+    % 归一化到01区间
+%     c=mapminmax(c,0,1);
+    % 均值调为1
+    c=c-mean(c)+1;
+    
+    
     
     W=diag(c);
 
@@ -39,9 +44,9 @@ function c=w_kurt(y,dic)
         
         c(i)=kurtsis(y(find(atom~=0)));
         
-        
     end
     
+%     c=(1./c).^2;
 
     
 
