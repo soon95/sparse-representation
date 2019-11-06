@@ -76,14 +76,14 @@ zeta_max=0.051;              %(需要根据实际情况调整)
 W_step=4;
 [Dic,rows,cols]=generate_dic(len,f_min,f_max,zeta_min,zeta_max,W_step,fs);
 Dic=dictnormalize(Dic);
-Dic=Dic/norm(Dic); 
+% Dic=Dic/norm(Dic); 
 
 
 
 %% 稀疏恢复算法
 
 cc=[];
-ex_num=50;
+ex_num=10;
 range=0.01:0.0025:0.06;
 % bpdn算法实在是太慢了，放弃
 % 用ist

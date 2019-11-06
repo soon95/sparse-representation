@@ -21,6 +21,7 @@ function [ x ] = ist( y,A,lamda,maxErr,maxIter )
         y = y';%y should be a column vector      
     end 
     %soft = @(x,T) sign(x).*max(abs(x) - T,0);
+    
     n = size(A,2);    
     x = zeros(n,1);%Initialize x=0  
     f = 0.5*(y-A*x)'*(y-A*x)+lamda*sum(abs(x));%added in v1.1

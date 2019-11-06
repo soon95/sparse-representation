@@ -93,8 +93,10 @@ distance=5;         %聚类距离尺度，需要着重设置
 
 % ist
 sigma = 0.05;
-lamda = sigma*sqrt(2*log(len));
-theta=ist(signal,Dic,lamda,maxErr,maxIter);
+lamda = sigma*sqrt(2*log(cols));
+% theta=ist(signal,Dic,lamda,maxErr,maxIter);
+
+theta=ist(signal,Dic,lamda);
 sig_recovery=Dic*theta;
 
 figure();
@@ -129,12 +131,21 @@ plot(t,sig_recovery);
 
 
 % wist
-sigma = 0.06;
-lamda = sigma*sqrt(2*log(len));
-theta=wist(signal,Dic,lamda,maxErr,maxIter);
+% sigma = 0.06;
+% lamda = sigma*sqrt(2*log(len));
+% theta=wist(signal,Dic,lamda,maxErr,maxIter);
+% sig_recovery=Dic*theta;
+% 
+% figure();
+% plot(t,sig_recovery);
+
+
+% clustershrinkIST
+theta=ClusterShrinkIST(signal,Dic,lamda,20);
 sig_recovery=Dic*theta;
 
 figure();
 plot(t,sig_recovery);
+
 
 
