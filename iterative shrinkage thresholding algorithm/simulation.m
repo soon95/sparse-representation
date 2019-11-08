@@ -53,20 +53,20 @@ end
 SNR=-7;
 [signal,noise]=noisegen(sig,SNR);
 
-% figure()
-% subplot(2,1,1);
-% plot(t,sig);
-% title('无噪仿真信号');
-% xlabel('时间 t/s');
-% ylabel('幅值 A(m/s^2)');
-% ylim([-1,1]);
-% 
-% subplot(2,1,2);
-% plot(t,signal);
-% title('无噪仿真信号');
-% xlabel('时间 t/s');
-% ylabel('幅值 A(m/s^2)');
-% ylim([-1,1]);
+figure()
+subplot(2,1,1);
+plot(t,sig);
+title('无噪仿真信号');
+xlabel('时间 t/s');
+ylabel('幅值 A(m/s^2)');
+ylim([-1,1]);
+
+subplot(2,1,2);
+plot(t,signal);
+title('仿真信号');
+xlabel('时间 t/s');
+ylabel('幅值 A(m/s^2)');
+ylim([-1,1]);
 
 %% 构造字典
 f_min=299;                  %(需要根据实际情况调整)
@@ -147,5 +147,12 @@ sig_recovery=Dic*theta;
 figure();
 plot(t,sig_recovery);
 
+
+% CcStOMP
+[theta,~]=ClusterShrinkStOMP(signal,Dic,10,0.6,20);
+sig_recovery=Dic*theta;
+
+figure();
+plot(t,sig_recovery);
 
 
