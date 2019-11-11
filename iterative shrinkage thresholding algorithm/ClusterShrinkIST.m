@@ -4,7 +4,8 @@ function [ theta,err ] = ClusterShrinkIST( y,dic,lamda,distance,ts,max_iter )
 %     y:输入信号
 %     A:字典
 %     lamda:乘子
-%     err:收敛误差
+%     distance:聚类距离尺度
+%     ts:原子挑选相关度阈值
 %     maxIter:最大迭代次数
 
     if nargin<6

@@ -45,10 +45,6 @@ for i=1:len/(T*fs)
     end
     count=count+1;
 end
-
-% figure();
-% plot(t,sig);
-
 %% 加入噪声
 SNR=-5;
 
@@ -80,31 +76,58 @@ Dic=Dic/norm(Dic);
 
 
 
-%% 稀疏恢复算法
+%% 稀疏恢复算法 CcIST
+% 算法中共有四个参数 分别讨论
+%     lamda:乘子                  （重点参数）
+%     distance:聚类距离尺度        （重点参数）
+%     ts:原子挑选相关度阈值
+%     maxIter:最大迭代次数
 
+
+exp_num=50; %每组实验次数
+
+
+%% 参数:sigma
+% cc=[];
+% sigma_range=0.01:0.0025:0.05;
+% for sigma=sigma_range
+%     lamda=sigma*sqrt(2*log(cols));
+%     
+%     temp=[];
+%     for i=1:exp_num
+%         [signal,noise]=noisegen(sig,SNR);
+%         theta=ClusterShrinkIST(signal,Dic,lamda,20);
+%         sig_recovery=Dic*theta;
+%         % 相关系数
+%         r=corrcoef(sig,sig_recovery);
+%         temp=[temp r(1,2)];
+%     end
+%     % 取均值
+%     cc=[cc mean(temp)];
+% end
+% 
+% figure()
+% plot(sigma_range,cc);
+%% 参数:ts
 cc=[];
-ex_num=10;
-range=0.01:0.0025:0.05;
-% bpdn算法实在是太慢了，放弃
-% 用ist
-
-for sigma=range
-    lamda=sigma*sqrt(2*log(cols));
+ts_range=0.5:0.01:0.8;
+for ts=ts_range
     
+    sigma=0.03;
+    lamda=sigma*sqrt(2*log(cols));
     temp=[];
-    for i=1:ex_num
+    for i=1:exp_num
         [signal,noise]=noisegen(sig,SNR);
-        theta=ist(signal,Dic,lamda);
+        theta=ClusterShrinkIST(signal,Dic,lamda,20,ts);
         sig_recovery=Dic*theta;
         % 相关系数
         r=corrcoef(sig,sig_recovery);
         temp=[temp r(1,2)];
-        
     end
     % 取均值
-    cc=[cc mean(temp)];
+    cc=[cc mean(temp)]; 
 end
 
-
 figure()
-plot(range,cc);
+plot(ts_range,cc);
+
