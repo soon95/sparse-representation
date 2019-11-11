@@ -82,29 +82,57 @@ Dic=Dic/norm(Dic);
 
 %% 稀疏恢复算法
 
-cc=[];
-ex_num=10;
-range=0.01:0.0025:0.05;
-% bpdn算法实在是太慢了，放弃
-% 用ist
 
-for sigma=range
-    lamda=sigma*sqrt(2*log(cols));
-    
-    temp=[];
-    for i=1:ex_num
-        [signal,noise]=noisegen(sig,SNR);
-        theta=ist(signal,Dic,lamda);
-        sig_recovery=Dic*theta;
-        % 相关系数
-        r=corrcoef(sig,sig_recovery);
-        temp=[temp r(1,2)];
-        
-    end
-    % 取均值
-    cc=[cc mean(temp)];
-end
+%% 比较多种算法重构效果图
 
+SNR=-6;
+[signal,noise]=noisegen(sig,SNR);
+figure();
+subplot(3,1,1);
+plot(t,sig);
+title('无噪仿真信号');
+xlabel('时间 t/s');
+ylabel('幅值 A(m/s^2)');
+ylim([-1,1]);
+subplot(3,1,2);
+plot(t,noise);
+title('噪声');
+xlabel('时间 t/s');
+ylabel('幅值 A(m/s^2)');
+ylim([-1,1]);
+subplot(3,1,3);
+plot(t,signal);
+title('仿真信号');
+xlabel('时间 t/s');
+ylabel('幅值 A(m/s^2)');
+ylim([-1,1]);
 
-figure()
-plot(range,cc);
+% CcIST
+sigma=0.03;
+lamda=sigma*sqrt(2*log(cols));
+ts=0.7;
+theta_CcIST=ClusterShrinkIST(signal,Dic,lamda,20,ts);
+sig_CcIST=Dic*theta_CcIST;
+
+% IST
+sigma=0.03;
+lamda=sigma*sqrt(2*log(cols));
+theta_IST=ist(signal,Dic,lamda);
+sig_IST=Dic*theta_IST;
+
+% 作图
+figure();
+subplot(2,1,1);
+plot(t,sig_CcIST);
+title('CcIST');
+xlabel('时间 t/s');
+ylabel('幅值 A(m/s^2)');
+% ylim([-1,1]);
+subplot(2,1,2);
+plot(t,sig_IST);
+title('IST');
+xlabel('时间 t/s');
+ylabel('幅值 A(m/s^2)');
+% ylim([-1,1]);
+
+%% 比较多种信噪比下相关系数等指标的性能
