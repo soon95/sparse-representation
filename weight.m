@@ -20,7 +20,9 @@ function [ W ] = weight( y,dic )
     % 归一化到01区间
 %     c=mapminmax(c,0,1);
     % 均值调为1
-    c=c-mean(c)+1;
+%     c=c-mean(c)+1;
+    % 调到0 1之间
+    c=mapminmax(c,0,1)+0.5;
     
     
     

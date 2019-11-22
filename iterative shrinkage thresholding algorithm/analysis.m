@@ -149,8 +149,8 @@ Dic=Dic/norm(Dic);
 % ylabel('幅值 A(m/s^2)');
 % % ylim([-1,1]);
 %% 比较多种信噪比下相关系数等指标的性能
-SNR_range=0:-0.5:-7;
-ex_num=50;% 每组实验次数
+SNR_range=0:-1:-7;
+ex_num=1;% 每组实验次数
 
 cc=[];
 for SNR=SNR_range
@@ -172,6 +172,14 @@ for SNR=SNR_range
         lamda=sigma*sqrt(2*log(cols));
         theta_IST=ist(signal,Dic,lamda);
         sig_IST=Dic*theta_IST;
+        
+        
+        % bpdn
+        sigma = 0.08;
+        lamda = sigma*sqrt(2*log(cols));
+        theta_BPDN=bpdn(signal,Dic,lamda);
+        sig_BPDN=Dic*theta_BPDN;
+        
 
         % CcStOMP
         ts=0.7;
@@ -183,13 +191,14 @@ for SNR=SNR_range
         % 算相关度
         r_CcIST=corrcoef(sig,sig_CcIST);
         r_IST=corrcoef(sig,sig_IST);
+        r_BPDN=corrcoef(sig,sig_BPDN);
         r_CcStOMP=corrcoef(sig,sig_CcStOMP);
         
-        temp=[temp;r_CcIST(1,2) r_IST(1,2) r_CcStOMP(1,2)];
+        temp=[temp;r_CcIST(1,2) r_IST(1,2) r_BPDN(1,2) r_CcStOMP(1,2)];
         
     end
     
-    cc=[cc;mean(temp)];
+    cc=[cc;mean(temp,1)];
     
 
 end
@@ -198,8 +207,9 @@ figure()
 plot(SNR_range,cc(:,1),'xr-');
 hold on;
 plot(SNR_range,cc(:,2),'og-');
-plot(SNR_range,cc(:,3),'*b-');
-legend('CcIST','IST','CcStOMP');
+plot(SNR_range,cc(:,3),'^y-');
+plot(SNR_range,cc(:,4),'*b-');
+legend('CcIST','IST','BPDN','CcStOMP');
 
 %%
 

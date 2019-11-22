@@ -50,7 +50,7 @@ end
 % plot(t,sig);
 
 %% 加入噪声
-SNR=-3;
+SNR=-5;
 [signal,noise]=noisegen(sig,SNR);
 
 figure()
@@ -74,8 +74,9 @@ f_max=301;                  %(需要根据实际情况调整)
 zeta_min=0.049;              %(需要根据实际情况调整)
 zeta_max=0.051;              %(需要根据实际情况调整)
 W_step=4;
-[Dic,rows,cols]=dic(len,f_min,f_max,zeta_min,zeta_max,W_step,fs);
+[Dic,rows,cols]=generate_dic(len,f_min,f_max,zeta_min,zeta_max,W_step,fs);
 Dic=dictnormalize(Dic);
+Dic=Dic/norm(Dic);
 %% 稀疏恢复 
 
 maxIter=30;           %迭代次数
@@ -83,19 +84,40 @@ ts=3;               %极限系数
 distance=5;         %聚类距离尺度，需要着重设置
 
 % bpdn
-sigma = 0.02;
-lamda = sigma*sqrt(2*log(len));
+sigma = 0.03;
+lamda = sigma*sqrt(2*log(cols));
+
+
 theta=bpdn(signal,Dic,lamda);
 sig_recovery=Dic*theta;
+
+cc=corrcoef(sig,sig_recovery);
+fprintf('CC-bpdn %d\n',cc(1,2));
+
+figure();
+plot(t,sig_recovery);
+
+% ist
+theta=ist(signal,Dic,lamda);
+sig_recovery=Dic*theta;
+
+cc=corrcoef(sig,sig_recovery);
+fprintf('CC-ist %d\n',cc(1,2));
 
 figure();
 plot(t,sig_recovery);
 
 % wbpdn
-sigma = 0.03;
-lamda = sigma*sqrt(2*log(len));
+% sigma = 0.03;
+% lamda = sigma*sqrt(2*log(len));
 theta=Wbpdn(signal,Dic,lamda);
 sig_recovery=Dic*theta;
 
+cc=corrcoef(sig,sig_recovery);
+fprintf('CC-Wbpdn %d\n',cc(1,2));
+
 figure();
 plot(t,sig_recovery);
+
+
+
