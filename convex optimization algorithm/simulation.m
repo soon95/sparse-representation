@@ -50,7 +50,7 @@ end
 % plot(t,sig);
 
 %% 加入噪声
-SNR=-5;
+SNR=-7;
 [signal,noise]=noisegen(sig,SNR);
 
 figure()
@@ -84,7 +84,7 @@ ts=3;               %极限系数
 distance=5;         %聚类距离尺度，需要着重设置
 
 % bpdn
-sigma = 0.03;
+sigma = 0.04;
 lamda = sigma*sqrt(2*log(cols));
 
 
@@ -115,6 +115,17 @@ sig_recovery=Dic*theta;
 
 cc=corrcoef(sig,sig_recovery);
 fprintf('CC-Wbpdn %d\n',cc(1,2));
+
+figure();
+plot(t,sig_recovery);
+
+
+% wist
+theta=wist(signal,Dic,lamda);
+sig_recovery=Dic*theta;
+
+cc=corrcoef(sig,sig_recovery);
+fprintf('CC-wist %d\n',cc(1,2));
 
 figure();
 plot(t,sig_recovery);
