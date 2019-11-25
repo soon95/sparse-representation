@@ -1,5 +1,5 @@
-function [ x ] = ist( y,A,lamda,maxErr,maxIter )
-%IST 迭代阈值收缩算法 软阈值 处理一范数问题
+function [ x ] = sist( y,A,lamda,maxErr,maxIter,window )
+%IST 迭代阈值收缩算法 的一个改进版本
 %   输入参数：
 %     y:输入信号
 %     A:字典
@@ -7,6 +7,9 @@ function [ x ] = ist( y,A,lamda,maxErr,maxIter )
 %     err:收敛误差
 %     maxIter:最大迭代次数
 
+    if nargin < 6    
+        window = 20;    
+    end 
     if nargin < 5    
         maxIter = 10000;    
     end    
@@ -29,22 +32,17 @@ function [ x ] = ist( y,A,lamda,maxErr,maxIter )
     while 1    
         x_pre = x;
         B=x + A'*(y-A*x);
-        x = soft_threshold(B,lamda);%update x    
+        x = soft_threshold(B,lamda,window);%update x    
         
         %% 查看迭代中变化情况
 %         figure();
 %         subplot(3,1,1);
 %         plot(x_pre);
-%         title('上一次');
 %         subplot(3,1,2);
 %         plot(x);
-%         title('本次');
 %         subplot(3,1,3);
 %         plot(B);
-%         title('软阈值函数输入');
         %%
-        
-        
         iter = iter + 1;  
         f_pre = f;%added in v1.1
         f = 0.5*(y-A*x)'*(y-A*x)+lamda*sum(abs(x));%added in v1.1
@@ -65,7 +63,29 @@ function [ x ] = ist( y,A,lamda,maxErr,maxIter )
     end  
 end
 
-%% 软阈值函数
-function [ x ]=soft_threshold(b,lamda)
-    x=sign(b).*max(abs(b) - lamda,0);
+%% 局部软阈值函数
+function [ x ]=soft_threshold(b,lamda,window)
+
+    length=size(b,1);
+    % 初始化结果，全零
+    x=zeros(length,1);
+    % 找出大于lamda的项索引
+    candi=find(abs(b)>lamda);
+    [class,class_num,eachClass]=cluster1D(candi,window);
+    
+    for i=1:class_num
+        atoms_index=class(i,1:eachClass(i));
+        atoms=b(atoms_index);
+        [~,selected_index]=max(abs(atoms));
+        % 在字典中全局的索引位置
+        index=atoms_index(selected_index);
+        selected=b(index);
+        
+        val=sign(selected)*(abs(selected)-lamda);
+        
+        x(index)=val;
+        
+    end
+
+%     x=sign(b).*max(abs(b) - lamda,0);
 end

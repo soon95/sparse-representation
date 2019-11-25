@@ -20,7 +20,7 @@ sig_laplacewavelet=exp(-(damp/sqrt(1-damp^2))*2*pi*f_vibrate*t).*sin(2*pi*f_vibr
 Wss=round(t0*fs);
 
 A1=1;                   %幅值
-A2=1;                 %幅值
+A2=0.5;                 %幅值
 
 sig=zeros(len,1);
 for k=1:len
@@ -174,11 +174,11 @@ for SNR=SNR_range
         sig_IST=Dic*theta_IST;
         
         
-        % bpdn
-        sigma = 0.08;
+        % sist
+        sigma = 0.03;
         lamda = sigma*sqrt(2*log(cols));
-        theta_BPDN=bpdn(signal,Dic,lamda);
-        sig_BPDN=Dic*theta_BPDN;
+        theta_sist=sist(signal,Dic,lamda);
+        sig_sist=Dic*theta_sist;
         
 
         % CcStOMP
@@ -191,10 +191,10 @@ for SNR=SNR_range
         % 算相关度
         r_CcIST=corrcoef(sig,sig_CcIST);
         r_IST=corrcoef(sig,sig_IST);
-        r_BPDN=corrcoef(sig,sig_BPDN);
+        r_sist=corrcoef(sig,sig_sist);
         r_CcStOMP=corrcoef(sig,sig_CcStOMP);
         
-        temp=[temp;r_CcIST(1,2) r_IST(1,2) r_BPDN(1,2) r_CcStOMP(1,2)];
+        temp=[temp;r_CcIST(1,2) r_IST(1,2) r_sist(1,2) r_CcStOMP(1,2)];
         
     end
     
@@ -209,7 +209,7 @@ hold on;
 plot(SNR_range,cc(:,2),'og-');
 plot(SNR_range,cc(:,3),'^y-');
 plot(SNR_range,cc(:,4),'*b-');
-legend('CcIST','IST','BPDN','CcStOMP');
+legend('CcIST','IST','sist','CcStOMP');
 
 %%
 

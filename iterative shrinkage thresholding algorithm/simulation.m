@@ -50,7 +50,7 @@ end
 % plot(t,sig);
 
 %% 加入噪声
-SNR=-7;
+SNR=-6;
 [signal,noise]=noisegen(sig,SNR);
 
 figure()
@@ -92,12 +92,15 @@ distance=5;         %聚类距离尺度，需要着重设置
 % sig_recovery=Dic*theta;
 
 % ist
-sigma = 0.05;
+sigma = 0.06;
 lamda = sigma*sqrt(2*log(cols));
 % theta=ist(signal,Dic,lamda,maxErr,maxIter);
 
 theta=ist(signal,Dic,lamda);
 sig_recovery=Dic*theta;
+
+cc=corrcoef(sig,sig_recovery);
+fprintf('CC-ist %d\n',cc(1,2));
 
 figure();
 plot(t,sig_recovery);
@@ -141,16 +144,30 @@ plot(t,sig_recovery);
 
 
 % clustershrinkIST
-theta=ClusterShrinkIST(signal,Dic,lamda,20);
-sig_recovery=Dic*theta;
-
-figure();
-plot(t,sig_recovery);
+% theta=ClusterShrinkIST(signal,Dic,lamda,20);
+% sig_recovery=Dic*theta;
+% 
+% figure();
+% plot(t,sig_recovery);
 
 
 % CcStOMP
-[theta,~]=ClusterShrinkStOMP(signal,Dic,10,0.6,20);
+% [theta,~]=ClusterShrinkStOMP(signal,Dic,10,0.6,20);
+% sig_recovery=Dic*theta;
+% 
+% figure();
+% plot(t,sig_recovery);
+
+% sist
+% sigma = 0.04;
+% lamda = sigma*sqrt(2*log(cols));
+% theta=ist(signal,Dic,lamda,maxErr,maxIter);
+
+theta=sist(signal,Dic,lamda);
 sig_recovery=Dic*theta;
+
+cc=corrcoef(sig,sig_recovery);
+fprintf('CC-sist %d\n',cc(1,2));
 
 figure();
 plot(t,sig_recovery);
