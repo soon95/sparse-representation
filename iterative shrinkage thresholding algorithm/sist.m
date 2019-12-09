@@ -32,23 +32,26 @@ function [ x ] = sist( y,A,lamda,maxErr,maxIter,window )
     while 1    
         x_pre = x;
         B=x + A'*(y-A*x);
-        x = soft_threshold(B,lamda,window);%update x    
+        x = soft_threshold_v2(B,lamda,window);%update x    
         
         %% 查看迭代中变化情况
-%         figure();
-%         subplot(3,1,1);
-%         plot(x_pre);
-%         subplot(3,1,2);
-%         plot(x);
-%         subplot(3,1,3);
-%         plot(B);
+        if mod(iter,10)==0
+            figure();
+            subplot(3,1,1);
+            plot(x_pre);
+            subplot(3,1,2);
+            plot(x);
+            subplot(3,1,3);
+            plot(B);
+        end
+        
         %%
         iter = iter + 1;  
         f_pre = f;%added in v1.1
         f = 0.5*(y-A*x)'*(y-A*x)+lamda*sum(abs(x));%added in v1.1
         if abs(f-f_pre)/f_pre<maxErr%modified in v1.1
             fprintf('abs(f-f_pre)/f_pre<%f\n',maxErr);
-            fprintf('IST loop is %d\n',iter);
+            fprintf('SIST loop is %d\n',iter);
             break;
         end
         if iter >= maxIter
@@ -57,7 +60,7 @@ function [ x ] = sist( y,A,lamda,maxErr,maxIter,window )
         end
         if norm(x-x_pre)<maxErr
             fprintf('norm(x-x_pre)<%f\n',maxErr);
-            fprintf('IST loop is %d\n',iter);
+            fprintf('SIST loop is %d\n',iter);
             break;
         end
     end  
@@ -89,3 +92,35 @@ function [ x ]=soft_threshold(b,lamda,window)
 
 %     x=sign(b).*max(abs(b) - lamda,0);
 end
+
+
+%% 局部软阈值函数 的另一种实现
+function [b]=soft_threshold_v2(b,lamda,window)
+    
+    length=size(b,1);
+    half=round(window/2);
+    
+    % 首先收缩小于lamda的值
+    b(b<lamda)=0;
+    
+    % 
+    residual=abs(b);
+    
+    for i=1:length
+        
+        [value,index]=max(residual);
+        
+        if value==0
+            break;
+        end
+        
+        b(index-half:index-1)=0;
+        b(index)=sign(b(index))*(value-lamda);
+        b(index+1:index+half)=0;
+        
+        residual(index-half:index+half)=0;
+        
+    end
+end
+
+
