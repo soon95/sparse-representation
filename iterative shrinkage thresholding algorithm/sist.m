@@ -103,7 +103,7 @@ function [b]=soft_threshold_v2(b,lamda,window)
     % 首先收缩小于lamda的值
     b(b<lamda)=0;
     
-    % 
+    % 剩余矩阵，实际上度量了原子与信号的相似关系
     residual=abs(b);
     
     for i=1:length
@@ -114,11 +114,25 @@ function [b]=soft_threshold_v2(b,lamda,window)
             break;
         end
         
-        b(index-half:index-1)=0;
+        % 首先将窗内其他值置0，并将残差矩阵中对应项置0
+        if index-half<1
+            b(1:index-1)=0;  
+            residual(1:index-1)=0; 
+        else
+            b(index-half:index-1)=0;
+            residual(index-half:index-1)=0; 
+        end
+        if index+half>length
+            b(index+1:length)=0;
+            residual(index+1:length)=0; 
+        else
+            b(index+1:index+half)=0;
+            residual(index+1:index+half)=0; 
+        end
+        % 对当前值进行收缩处理
         b(index)=sign(b(index))*(value-lamda);
-        b(index+1:index+half)=0;
-        
-        residual(index-half:index+half)=0;
+        % 剩余矩阵中当前值置0
+        residual(index)=0;
         
     end
 end
