@@ -1,4 +1,4 @@
-function [ x ] = sist( y,A,lamda,maxErr,maxIter,window )
+function [ x, obj_f ] = sist( y,A,lamda,maxErr,maxIter,window )
 %IST 迭代阈值收缩算法 的一个改进版本
 %   输入参数：
 %     y:输入信号
@@ -23,11 +23,12 @@ function [ x ] = sist( y,A,lamda,maxErr,maxIter,window )
     if y_rows<y_columns      
         y = y';%y should be a column vector      
     end 
-    %soft = @(x,T) sign(x).*max(abs(x) - T,0);
     
+    obj_f=[];
     n = size(A,2);    
     x = zeros(n,1);%Initialize x=0  
     f = 0.5*(y-A*x)'*(y-A*x)+lamda*sum(abs(x));%added in v1.1
+    obj_f=[obj_f f];
     iter = 0; 
     while 1    
         x_pre = x;
@@ -35,20 +36,23 @@ function [ x ] = sist( y,A,lamda,maxErr,maxIter,window )
         x = soft_threshold_v2(B,lamda,window);%update x    
         
         %% 查看迭代中变化情况
-        if mod(iter,10)==0
-            figure();
-            subplot(3,1,1);
-            plot(x_pre);
-            subplot(3,1,2);
-            plot(x);
-            subplot(3,1,3);
-            plot(B);
-        end
+%         if mod(iter,10)==0
+%             figure();
+%             subplot(3,1,1);
+%             plot(x_pre);
+%             subplot(3,1,2);
+%             plot(x);
+%             subplot(3,1,3);
+%             plot(B);
+%         end
         
         %%
         iter = iter + 1;  
-        f_pre = f;%added in v1.1
-        f = 0.5*(y-A*x)'*(y-A*x)+lamda*sum(abs(x));%added in v1.1
+        f_pre = f;
+        f = 0.5*(y-A*x)'*(y-A*x)+lamda*sum(abs(x));
+        % 更新目标函数值
+        obj_f=[obj_f f];
+        
         if abs(f-f_pre)/f_pre<maxErr%modified in v1.1
             fprintf('abs(f-f_pre)/f_pre<%f\n',maxErr);
             fprintf('SIST loop is %d\n',iter);

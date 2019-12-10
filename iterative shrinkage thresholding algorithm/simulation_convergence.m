@@ -50,7 +50,7 @@ end
 % plot(t,sig);
 
 %% º”»Î‘Î…˘
-SNR=-5;
+SNR=-10;
 [signal,noise]=noisegen(sig,SNR);
 
 figure()
@@ -89,11 +89,11 @@ sigma = 0.025;
 lamda = sigma*sqrt(2*log(cols));
 
 
-theta_ist=ist(signal,Dic,lamda,maxErr,maxIter);
+[theta_ist,conv_ist]=ist(signal,Dic,lamda,maxErr,maxIter);
 sig_recovery_ist=Dic*theta_ist;
 
 
-theta_sist=sist(signal,Dic,lamda,maxErr,maxIter,window);
+[theta_sist,conv_list]=sist(signal,Dic,lamda,maxErr,maxIter,window);
 sig_recovery_sist=Dic*theta_sist;
 
 
@@ -138,4 +138,11 @@ title('IST');
 ylabel('Amplitude(m/s^2)');
 
 
-
+figure()
+plot(conv_list,'xr-');
+hold on;
+plot(conv_ist,'og-');
+title('convergence');
+xlabel('iterations');
+% ylabel('');
+legend('LIST','IST');
