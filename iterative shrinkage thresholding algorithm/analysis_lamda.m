@@ -67,7 +67,7 @@ window=100;         %´°¿Ú´óÐ¡
 % lamda = sigma*sqrt(2*log(cols));
 
 
-snr_inter=-3:-0.5:-9;
+snr_inter=-3:-0.5:-12;
 
 lamda_range=0.05:0.05:0.2;
 
@@ -124,13 +124,23 @@ for lamda=lamda_range
 
 
 end
+%%
 
 figure()
-plot(change_list);
+subplot(1,2,1);
+plot(snr_inter,change_list);
+title('(a)');
+xlabel('SNR/dB');
+set(gca, 'XDir','reverse'); 
+ylabel('ACC');
+legend('lamda=0.05','lamda=0.1','lamda=0.15','lamda=0.2');
 
 
-
-figure()
-plot(change_ist);
-
+subplot(1,2,2);
+plot(snr_inter,change_ist);
+title('(b)');
+xlabel('SNR/dB');
+set(gca, 'XDir','reverse'); 
+ylabel('ACC');
+legend('lamda=0.05','lamda=0.1','lamda=0.15','lamda=0.2');
 
