@@ -1,30 +1,30 @@
 %% 实验验证 外圈故障
 clc;clear all;close all
 %% 实验数据总时长1秒
-fs=6400;               % 振动信号采样频率
+fs=12000;               % 振动信号采样频率
 
-total_t=0.2;            % 处理时长
+total_t=0.5;            % 处理时长
 
 total_N=fs*total_t;     % 总采样点数
 point_N=1:total_N;      % 采样点
 
-bias_t=0.2;               % 偏移时间
+bias_t=0;               % 偏移时间
 bias_N=fs*bias_t;       % 偏移点数
 
 t=point_N/fs;           % 时间
 
-%% 构造字典
-f_min=2125;                  %(需要根据实际情况调整)
-f_max=2130;                  %(需要根据实际情况调整)
-zeta_min=0.12;              %(需要根据实际情况调整)
-zeta_max=0.13;              %(需要根据实际情况调整)
+%% 构造字典   内圈 频率 2809  阻尼 0.08
+f_min=2805;                  %(需要根据实际情况调整)
+f_max=2815;                  %(需要根据实际情况调整)
+zeta_min=0.07;              %(需要根据实际情况调整)
+zeta_max=0.09;              %(需要根据实际情况调整)
 W_step=2;
 [Dic,rows,cols]=generate_dic(total_N,f_min,f_max,zeta_min,zeta_max,W_step,fs);
 Dic=Dic/norm(Dic); 
 %% 读取数据
-load('F:\科研\实验数据\电机轴承-内外圈复合故障（西交新数据）\电机轴承-内外圈复合故障\SQIbearing-内外圈复合故障.mat');
+load('F:\科研\实验数据\CWRU\209.mat');
 
-original_signal=x1(point_N+bias_N)';
+original_signal=X209_DE_time(point_N+bias_N);
 
 % 原始信号幅值归一化
 original_signal=original_signal/abs(max(original_signal));
@@ -60,11 +60,11 @@ ylim([0,0.15]);
 
 %% 重构参数设置
 
-maxErr=1e-6;
-maxIter=100;
+maxErr=1e-4;
+maxIter=200;
 window=200;
 
-lamda=0.1;
+lamda=0.04;
 
 
 
@@ -104,32 +104,70 @@ ylim([0,0.1]);
 
 %% IST信号重构
 
-% theta_ist=ist(original_signal,Dic,lamda,maxErr,maxIter);
-% sig_recovery_ist=Dic*theta_ist;
+theta_ist=ist(original_signal,Dic,lamda,maxErr,maxIter);
+sig_recovery_ist=Dic*theta_ist;
+
+figure();
+subplot(3,1,1);
+
+plot(t,sig_recovery_ist)
+title('(a)');
+xlabel('Time(s)');
+ylabel('Amplitude');
+
+
+[f1,q_ist]=fouriorTransform(sig_recovery_ist,fs,0);
+
+subplot(3,1,2);
+plot(f1,q_ist);
+title('(b)');
+xlabel('Frequency(Hz)');
+ylabel('Amplitude');
+
+
+[f2,p_ist]=envolopeTransform( sig_recovery_ist,fs,0 );
+subplot(3,1,3);
+plot(f2,p_ist);
+title('(c)');
+xlabel('Frequency(Hz)');
+ylabel('Amplitude');
+xlim([0,1000]);
+ylim([0,0.1]);
+
+
+%% OMP
+% col=size(Dic,2);
+% [W,Gamma,~] = OMP(original_signal',Dic,maxIter);
+% theta_OMP=zeros(1,col);
+% theta_OMP(Gamma)=W;
+% theta_OMP=theta_OMP';
+% sig_recovery_OMP=Dic*theta_OMP;
 % 
 % figure();
 % subplot(3,1,1);
 % 
-% plot(t,sig_recovery_ist)
+% plot(t,sig_recovery_OMP)
 % title('(a)');
 % xlabel('Time(s)');
 % ylabel('Amplitude');
 % 
 % 
-% [f1,q_ist]=fouriorTransform(sig_recovery_ist,fs,0);
+% [f1,q_OMP]=fouriorTransform(sig_recovery_OMP,fs,0);
 % 
 % subplot(3,1,2);
-% plot(f1,q_ist);
+% plot(f1,q_OMP);
 % title('(b)');
 % xlabel('Frequency(Hz)');
 % ylabel('Amplitude');
 % 
 % 
-% [f2,p_ist]=envolopeTransform( sig_recovery_ist,fs,0 );
+% [f2,p_OMP]=envolopeTransform( sig_recovery_OMP,fs,0 );
 % subplot(3,1,3);
-% plot(f2,p_ist);
+% plot(f2,p_OMP);
 % title('(c)');
 % xlabel('Frequency(Hz)');
 % ylabel('Amplitude');
 % xlim([0,1000]);
 % ylim([0,0.1]);
+
+

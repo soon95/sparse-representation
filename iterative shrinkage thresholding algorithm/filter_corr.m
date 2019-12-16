@@ -1,9 +1,9 @@
 %%
 clc;clear all;close all
 %% 实验数据总时长1秒
-fs=6400;               % 振动信号采样频率
+fs=12000;               % 振动信号采样频率
 
-total_t=0.2;            % 处理时长
+total_t=0.1;            % 处理时长
 
 total_N=fs*total_t;     % 总采样点数
 point_N=1:total_N;      % 采样点
@@ -15,16 +15,16 @@ t=point_N/fs;           % 时间
 Ws=200;           %Laplace小波支撑长度（以点数表示）
 
 
-load('F:\科研\实验数据\电机轴承-内外圈复合故障（西交新数据）\电机轴承-内外圈复合故障\SQIbearing-内外圈复合故障.mat');
+load('F:\科研\实验数据\CWRU\169.mat');
 
-sig_x=x2(point_N+bias_N)';
+sig_x=X169_DE_time(point_N+bias_N);
 
 %%
 %进行FFT变换并做频谱图
 mag=abs(fft(sig_x));%进行fft变换
 figure(1)
 plot(t,sig_x);
-title('轴承故障信号');
+title('轴承故障信号'); 
 xlabel('时间 t/s');
 ylabel('幅值 A(m/s^2)');
 figure(2)
@@ -34,8 +34,8 @@ title('信号频谱(FFT)')
 %%
 display_step=1 %程序执行的现实标志
 
-f_kr=2100:2200;   %小波原子的频率范围
-zeta_kr=[0.11:0.01:0.15];     
+f_kr=2800:2820;   %小波原子的频率范围
+zeta_kr=[0.05:0.01:0.09];     
 
 t_kr_all=total_N/fs;
 t_kr_step=t_kr_all/total_N;  
