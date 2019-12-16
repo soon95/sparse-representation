@@ -3,31 +3,40 @@ clc;clear all;close all
 %% 实验数据总时长1秒
 fs=12000;               % 振动信号采样频率
 
-total_t=0.5;            % 处理时长
+total_t=0.2;            % 处理时长
 
 total_N=fs*total_t;     % 总采样点数
 point_N=1:total_N;      % 采样点
 
-bias_t=0;               % 偏移时间
+bias_t=4;               % 偏移时间
 bias_N=fs*bias_t;       % 偏移点数
 
 t=point_N/fs;           % 时间
 
-%% 构造字典   内圈 频率 2809  阻尼 0.08
-f_min=2805;                  %(需要根据实际情况调整)
-f_max=2815;                  %(需要根据实际情况调整)
-zeta_min=0.07;              %(需要根据实际情况调整)
-zeta_max=0.09;              %(需要根据实际情况调整)
+%% 构造字典     169 内圈 频率 2809  阻尼 0.08
+f_min=2852;                  %(需要根据实际情况调整)
+f_max=2857;                  %(需要根据实际情况调整)
+zeta_min=0.08;              %(需要根据实际情况调整)
+zeta_max=0.08;              %(需要根据实际情况调整)
 W_step=2;
 [Dic,rows,cols]=generate_dic(total_N,f_min,f_max,zeta_min,zeta_max,W_step,fs);
 Dic=Dic/norm(Dic); 
 %% 读取数据
-load('F:\科研\实验数据\CWRU\209.mat');
+% load('F:\科研\实验数据\CWRU\212.mat');
+% 
+% original_signal=X212_DE_time(point_N+bias_N);
+% 
+% % 原始信号幅值归一化
+% original_signal=original_signal/abs(max(original_signal));
+% 
+% % 加点噪声
+% amplitude_noise=0.4;
+% noise=amplitude_noise*randn(total_N,1);
+% original_signal=original_signal+noise;
 
-original_signal=X209_DE_time(point_N+bias_N);
 
-% 原始信号幅值归一化
-original_signal=original_signal/abs(max(original_signal));
+%% 读取处理过的信号
+load('inner_data1.mat');
 
 %%
 figure();
@@ -64,7 +73,7 @@ maxErr=1e-4;
 maxIter=200;
 window=200;
 
-lamda=0.04;
+lamda=0.05;
 
 
 

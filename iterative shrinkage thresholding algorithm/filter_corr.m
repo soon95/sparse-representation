@@ -8,16 +8,16 @@ total_t=0.1;            % 处理时长
 total_N=fs*total_t;     % 总采样点数
 point_N=1:total_N;      % 采样点
 
-bias_t=0;               % 偏移时间
+bias_t=5;               % 偏移时间
 bias_N=fs*bias_t;       % 偏移点数
 
 t=point_N/fs;           % 时间
 Ws=200;           %Laplace小波支撑长度（以点数表示）
 
 
-load('F:\科研\实验数据\CWRU\169.mat');
+load('F:\科研\实验数据\CWRU\212.mat');
 
-sig_x=X169_DE_time(point_N+bias_N);
+sig_x=X212_DE_time(point_N+bias_N);
 
 %%
 %进行FFT变换并做频谱图
@@ -34,8 +34,8 @@ title('信号频谱(FFT)')
 %%
 display_step=1 %程序执行的现实标志
 
-f_kr=2800:2820;   %小波原子的频率范围
-zeta_kr=[0.05:0.01:0.09];     
+f_kr=2800:2900;   %小波原子的频率范围
+zeta_kr=[0.08:0.01:0.09];     
 
 t_kr_all=total_N/fs;
 t_kr_step=t_kr_all/total_N;  
