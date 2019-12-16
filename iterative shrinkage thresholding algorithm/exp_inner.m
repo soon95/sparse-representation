@@ -13,7 +13,7 @@ bias_N=fs*bias_t;       % 偏移点数
 
 t=point_N/fs;           % 时间
 
-%% 构造字典     169 内圈 频率 2809  阻尼 0.08
+%% 构造字典     169 内圈 频率 2809  阻尼 0.08 , 212 2855
 f_min=2852;                  %(需要根据实际情况调整)
 f_max=2857;                  %(需要根据实际情况调整)
 zeta_min=0.08;              %(需要根据实际情况调整)
@@ -73,10 +73,7 @@ maxErr=1e-4;
 maxIter=200;
 window=200;
 
-lamda=0.05;
-
-
-
+lamda=0.06;
 
 %% LIST信号重构
 
@@ -142,41 +139,3 @@ xlabel('Frequency(Hz)');
 ylabel('Amplitude');
 xlim([0,1000]);
 ylim([0,0.1]);
-
-
-%% OMP
-% col=size(Dic,2);
-% [W,Gamma,~] = OMP(original_signal',Dic,maxIter);
-% theta_OMP=zeros(1,col);
-% theta_OMP(Gamma)=W;
-% theta_OMP=theta_OMP';
-% sig_recovery_OMP=Dic*theta_OMP;
-% 
-% figure();
-% subplot(3,1,1);
-% 
-% plot(t,sig_recovery_OMP)
-% title('(a)');
-% xlabel('Time(s)');
-% ylabel('Amplitude');
-% 
-% 
-% [f1,q_OMP]=fouriorTransform(sig_recovery_OMP,fs,0);
-% 
-% subplot(3,1,2);
-% plot(f1,q_OMP);
-% title('(b)');
-% xlabel('Frequency(Hz)');
-% ylabel('Amplitude');
-% 
-% 
-% [f2,p_OMP]=envolopeTransform( sig_recovery_OMP,fs,0 );
-% subplot(3,1,3);
-% plot(f2,p_OMP);
-% title('(c)');
-% xlabel('Frequency(Hz)');
-% ylabel('Amplitude');
-% xlim([0,1000]);
-% ylim([0,0.1]);
-
-
