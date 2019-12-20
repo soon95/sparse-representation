@@ -67,9 +67,9 @@ window=100;         %´°¿Ú´óÐ¡
 % lamda = sigma*sqrt(2*log(cols));
 
 
-snr_inter=-3:-0.5:-12;
+snr_inter=-3:-1:-14;
 
-lamda_range=0.05:0.05:0.2;
+lamda_range=0.05:0.05:0.25;
 
 change_list=[];
 change_ist=[];
@@ -125,6 +125,13 @@ for lamda=lamda_range
 
 end
 %%
+upper_list=max(change_list,[],2);
+lower_list=min(change_list,[],2);
+change_list=[change_list upper_list lower_list];
+
+upper_ist=max(change_ist,[],2);
+lower_ist=min(change_ist,[],2);
+change_ist=[change_ist upper_ist lower_ist];
 
 figure()
 subplot(1,2,1);
@@ -133,7 +140,7 @@ title('(a)');
 xlabel('SNR/dB');
 set(gca, 'XDir','reverse'); 
 ylabel('ACC');
-legend('lamda=0.05','lamda=0.1','lamda=0.15','lamda=0.2');
+legend('lamda=0.05','lamda=0.1','lamda=0.15','lamda=0.2','lamda=0.25','upper bound','lower bound');
 
 
 subplot(1,2,2);
@@ -142,5 +149,5 @@ title('(b)');
 xlabel('SNR/dB');
 set(gca, 'XDir','reverse'); 
 ylabel('ACC');
-legend('lamda=0.05','lamda=0.1','lamda=0.15','lamda=0.2');
+legend('lamda=0.05','lamda=0.1','lamda=0.15','lamda=0.2','lamda=0.25','upper bound','lower bound');
 

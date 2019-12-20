@@ -33,16 +33,15 @@ function [ x, obj_f ] = ist( y,A,lamda,maxErr,maxIter )
         x = soft_threshold(B,lamda);%update x    
         
         %% 查看迭代中变化情况
-%         figure();
-%         subplot(3,1,1);
-%         plot(x_pre);
-%         title('上一次');
-%         subplot(3,1,2);
-%         plot(x);
-%         title('本次');
-%         subplot(3,1,3);
-%         plot(B);
-%         title('软阈值函数输入');
+%        if mod(iter,10)==0
+%             figure();
+%             subplot(3,1,1);
+%             plot(x_pre);
+%             subplot(3,1,2);
+%             plot(x);
+%             subplot(3,1,3);
+%             plot(B);
+%         end
         %%
         
         

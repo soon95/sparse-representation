@@ -57,7 +57,7 @@ Dic=dictnormalize(Dic);
 Dic=Dic/norm(Dic); 
 %% 
 % SNR=-9;
-ex_num=50;          %实验次数  50
+ex_num=5;          %实验次数  50
 
 maxErr=1e-3;        %误差限
 maxIter=100;        %最大迭代次数

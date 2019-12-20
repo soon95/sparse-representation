@@ -50,7 +50,7 @@ end
 % plot(t,sig);
 
 %% º”»Î‘Î…˘
-SNR=-5;
+SNR=-6;
 [signal,noise]=noisegen(sig,SNR);
 
 figure()
@@ -81,11 +81,11 @@ Dic=dictnormalize(Dic);
 Dic=Dic/norm(Dic); 
 %% œ° Ëª÷∏¥ 
 
-maxErr=1e-3;
+maxErr=1e-4;
 maxIter=100;
-window=100;
+window=200;
 
-sigma = 0.025;
+sigma = 0.03;
 lamda = sigma*sqrt(2*log(cols));
 
 
@@ -114,7 +114,7 @@ ylabel('Amplitude(m/s^2)');
 
 subplot(4,1,3);
 plot(t,sig_recovery_sist);
-title('LIST');
+title('LeIST');
 xlabel('Time(s)');
 ylabel('Amplitude(m/s^2)');
 ylim([-1,1]);
@@ -130,7 +130,7 @@ ylim([-1,1]);
 figure()
 subplot(2,1,1);
 plot(theta_sist);
-title('LIST');
+title('LeIST');
 ylabel('Amplitude(m/s^2)');
 subplot(2,1,2);
 plot(theta_ist);
