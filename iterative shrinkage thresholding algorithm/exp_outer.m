@@ -35,6 +35,7 @@ amplitude_noise=0.45;
 noise=amplitude_noise*randn(total_N,1);
 original_signal=original_signal+noise;
 
+%%
 
 figure();
 subplot(3,1,1);
@@ -69,9 +70,9 @@ ylim([0,0.15]);
 
 maxErr=1e-4;
 maxIter=100;
-window=200;
+window=400;
 
-lamda=0.1;
+lamda=0.08;
 
 %% IST信号重构
 
@@ -141,37 +142,37 @@ ylim([0,0.1]);
 
 
 %% CcStOMP信号重构
-ts=0.3;               %极限系数
-distance=100;         %聚类距离尺度，需要着重设置
-
-theta_CcStOMP=ClusterShrinkStOMP(original_signal,Dic,maxIter,ts,distance);
-sig_recovery_CcStOMP=Dic*theta_CcStOMP;
-
-figure();
-subplot(3,1,1);
-
-plot(t,sig_recovery_CcStOMP)
-title('(a)');
-xlabel('Time(s)');
-ylabel('Amplitude');
-
-
-[f1,q_CcStOMP]=fouriorTransform(sig_recovery_CcStOMP,fs,0);
-
-subplot(3,1,2);
-plot(f1,q_CcStOMP);
-title('(b)');
-xlabel('Frequency(Hz)');
-ylabel('Amplitude');
-
-
-[f2,p_CcStOMP]=envolopeTransform( sig_recovery_CcStOMP,fs,0 );
-subplot(3,1,3);
-plot(f2,p_CcStOMP);
-title('(c)');
-xlabel('Frequency(Hz)');
-ylabel('Amplitude');
-xlim([0,1000]);
-ylim([0,0.2]);
+% ts=0.3;               %极限系数
+% distance=100;         %聚类距离尺度，需要着重设置
+% 
+% theta_CcStOMP=ClusterShrinkStOMP(original_signal,Dic,maxIter,ts,distance);
+% sig_recovery_CcStOMP=Dic*theta_CcStOMP;
+% 
+% figure();
+% subplot(3,1,1);
+% 
+% plot(t,sig_recovery_CcStOMP)
+% title('(a)');
+% xlabel('Time(s)');
+% ylabel('Amplitude');
+% 
+% 
+% [f1,q_CcStOMP]=fouriorTransform(sig_recovery_CcStOMP,fs,0);
+% 
+% subplot(3,1,2);
+% plot(f1,q_CcStOMP);
+% title('(b)');
+% xlabel('Frequency(Hz)');
+% ylabel('Amplitude');
+% 
+% 
+% [f2,p_CcStOMP]=envolopeTransform( sig_recovery_CcStOMP,fs,0 );
+% subplot(3,1,3);
+% plot(f2,p_CcStOMP);
+% title('(c)');
+% xlabel('Frequency(Hz)');
+% ylabel('Amplitude');
+% xlim([0,1000]);
+% ylim([0,0.2]);
 
 

@@ -71,7 +71,7 @@ ylim([0,0.15]);
 
 maxErr=1e-4;
 maxIter=200;
-window=200;
+window=300;
 
 lamda=0.06;
 
