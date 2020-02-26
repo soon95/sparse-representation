@@ -89,12 +89,10 @@ xlabel('Time(s)');
 ylabel('Amplitude');
 
 
-[f1,q_list]=fouriorTransform(sig_recovery_sist,fs,0);
-
 subplot(3,1,2);
-plot(f1,q_list);
+plot(theta_sist);
 title('(b)');
-xlabel('Frequency(Hz)');
+xlabel('Index');
 ylabel('Amplitude');
 
 
@@ -122,12 +120,10 @@ xlabel('Time(s)');
 ylabel('Amplitude');
 
 
-[f1,q_ist]=fouriorTransform(sig_recovery_ist,fs,0);
-
 subplot(3,1,2);
-plot(f1,q_ist);
+plot(theta_ist);
 title('(b)');
-xlabel('Frequency(Hz)');
+xlabel('Index');
 ylabel('Amplitude');
 
 
