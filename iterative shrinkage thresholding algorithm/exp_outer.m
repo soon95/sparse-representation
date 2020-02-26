@@ -21,19 +21,22 @@ zeta_max=0.058;              %(需要根据实际情况调整)
 W_step=2;
 [Dic,rows,cols]=generate_dic(total_N,f_min,f_max,zeta_min,zeta_max,W_step,fs);
 Dic=Dic/norm(Dic); 
-%% 读取数据
-load('F:\科研\实验数据\凯斯西储轴承数据集\2004.02.17.00.02.39.mat')
+%% 读取数据 
+% load('F:\科研\实验数据\凯斯西储轴承数据集\2004.02.17.00.02.39.mat')
+% 
+% original_signal=VarName1(point_N+bias_N);
+% 
+% % 原始信号幅值归一化
+% original_signal=original_signal/abs(max(original_signal));
+% 
+% 
+% % 加点随机噪声看看
+% amplitude_noise=0.75;
+% noise=amplitude_noise*randn(total_N,1);
+% original_signal=original_signal+noise;
 
-original_signal=VarName1(point_N+bias_N);
-
-% 原始信号幅值归一化
-original_signal=original_signal/abs(max(original_signal));
-
-
-% 加点随机噪声看看
-amplitude_noise=0.45;
-noise=amplitude_noise*randn(total_N,1);
-original_signal=original_signal+noise;
+%% 读取处理过的信号
+load('outer_data2.mat');
 
 %%
 
@@ -72,7 +75,7 @@ maxErr=1e-4;
 maxIter=100;
 window=400;
 
-lamda=0.08;
+lamda=0.06;
 
 %% IST信号重构
 
@@ -80,7 +83,7 @@ theta_ist=ist(original_signal,Dic,lamda,maxErr,maxIter);
 sig_recovery_ist=Dic*theta_ist;
 
 figure();
-subplot(3,1,1);
+subplot(4,1,1);
 
 plot(t,sig_recovery_ist)
 title('(a)');
@@ -90,17 +93,24 @@ ylabel('Amplitude');
 
 [f1,q_ist]=fouriorTransform(sig_recovery_ist,fs,0);
 
-subplot(3,1,2);
+subplot(4,1,2);
 plot(f1,q_ist);
 title('(b)');
 xlabel('Frequency(Hz)');
 ylabel('Amplitude');
 
 
-[f2,p_ist]=envolopeTransform( sig_recovery_ist,fs,0 );
-subplot(3,1,3);
-plot(f2,p_ist);
+subplot(4,1,3);
+plot(theta_ist);
 title('(c)');
+xlabel('Index');
+ylabel('Amplitude');
+
+
+[f2,p_ist]=envolopeTransform( sig_recovery_ist,fs,0 );
+subplot(4,1,4);
+plot(f2,p_ist);
+title('(d)');
 xlabel('Frequency(Hz)');
 ylabel('Amplitude');
 xlim([0,1000]);
@@ -113,7 +123,7 @@ theta_sist=sist(original_signal,Dic,lamda,maxErr,maxIter,window);
 sig_recovery_sist=Dic*theta_sist;
 
 figure();
-subplot(3,1,1);
+subplot(4,1,1);
 
 plot(t,sig_recovery_sist)
 title('(a)');
@@ -123,17 +133,22 @@ ylabel('Amplitude');
 
 [f1,q_list]=fouriorTransform(sig_recovery_sist,fs,0);
 
-subplot(3,1,2);
+subplot(4,1,2);
 plot(f1,q_list);
 title('(b)');
 xlabel('Frequency(Hz)');
 ylabel('Amplitude');
 
+subplot(4,1,3);
+plot(theta_sist);
+title('(c)')
+xlabel('Index');
+ylabel('Amplitude');
 
 [f2,p_list]=envolopeTransform( sig_recovery_sist,fs,0 );
-subplot(3,1,3);
+subplot(4,1,4);
 plot(f2,p_list);
-title('(c)');
+title('(d)');
 xlabel('Frequency(Hz)');
 ylabel('Amplitude');
 xlim([0,1000]);
