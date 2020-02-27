@@ -30,13 +30,13 @@ Dic=Dic/norm(Dic);
 % original_signal=original_signal/abs(max(original_signal));
 % 
 % % 加点噪声
-% amplitude_noise=0.4;
+% amplitude_noise=0.55;
 % noise=amplitude_noise*randn(total_N,1);
 % original_signal=original_signal+noise;
 
 
 %% 读取处理过的信号
-load('inner_data1.mat');
+load('inner_data2.mat');
 
 %%
 figure();
@@ -73,7 +73,7 @@ maxErr=1e-4;
 maxIter=200;
 window=300;
 
-lamda=0.06;
+lamda=0.08;
 
 %% LIST信号重构
 
@@ -86,14 +86,14 @@ subplot(3,1,1);
 plot(t,sig_recovery_sist)
 title('(a)');
 xlabel('Time(s)');
-ylabel('Amplitude');
+ylabel('Amplitude(m/s^2)');
 
 
 subplot(3,1,2);
 plot(theta_sist);
 title('(b)');
-xlabel('Index');
-ylabel('Amplitude');
+xlabel('Point');
+ylabel('Amplitude(m/s^2)');
 
 
 [f2,p_list]=envolopeTransform( sig_recovery_sist,fs,0 );
@@ -101,7 +101,7 @@ subplot(3,1,3);
 plot(f2,p_list);
 title('(c)');
 xlabel('Frequency(Hz)');
-ylabel('Amplitude');
+ylabel('Amplitude(m/s^2)');
 xlim([0,1000]);
 ylim([0,0.1]);
 
@@ -117,14 +117,14 @@ subplot(3,1,1);
 plot(t,sig_recovery_ist)
 title('(a)');
 xlabel('Time(s)');
-ylabel('Amplitude');
+ylabel('Amplitude(m/s^2)');
 
 
 subplot(3,1,2);
 plot(theta_ist);
 title('(b)');
-xlabel('Index');
-ylabel('Amplitude');
+xlabel('Point');
+ylabel('Amplitude(m/s^2)');
 
 
 [f2,p_ist]=envolopeTransform( sig_recovery_ist,fs,0 );
@@ -132,6 +132,6 @@ subplot(3,1,3);
 plot(f2,p_ist);
 title('(c)');
 xlabel('Frequency(Hz)');
-ylabel('Amplitude');
+ylabel('Amplitude(m/s^2)');
 xlim([0,1000]);
 ylim([0,0.1]);
