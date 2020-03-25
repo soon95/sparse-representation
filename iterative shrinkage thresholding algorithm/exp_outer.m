@@ -3,7 +3,7 @@ clc;clear all;close all
 %% 实验数据总时长1秒
 fs=20000;               % 振动信号采样频率
 
-total_t=0.1;            % 处理时长
+total_t=0.2;            % 处理时长
 
 total_N=fs*total_t;     % 总采样点数
 point_N=1:total_N;      % 采样点
@@ -14,13 +14,17 @@ bias_N=fs*bias_t;       % 偏移点数
 t=point_N/fs;           % 时间
 
 %% 构造字典
-f_min=4377;                  %(需要根据实际情况调整)
-f_max=4383;                  %(需要根据实际情况调整)
-zeta_min=0.052;              %(需要根据实际情况调整)
-zeta_max=0.058;              %(需要根据实际情况调整)
-W_step=2;
-[Dic,rows,cols]=generate_dic(total_N,f_min,f_max,zeta_min,zeta_max,W_step,fs);
-Dic=Dic/norm(Dic); 
+% f_min=4377;                  %(需要根据实际情况调整)
+% f_max=4383;                  %(需要根据实际情况调整)
+% zeta_min=0.052;              %(需要根据实际情况调整)
+% zeta_max=0.058;              %(需要根据实际情况调整)
+% W_step=2;
+% [Dic,rows,cols]=generate_dic(total_N,f_min,f_max,zeta_min,zeta_max,W_step,fs);
+% Dic=Dic/norm(Dic); 
+
+% 构造字典太耗时了，把它持久化一下吧
+load('Dic_outer.mat');
+
 %% 读取数据 
 % load('F:\科研\实验数据\凯斯西储轴承数据集\2004.02.17.00.02.39.mat')
 % 
@@ -35,8 +39,8 @@ Dic=Dic/norm(Dic);
 % noise=amplitude_noise*randn(total_N,1);
 % original_signal=original_signal+noise;
 
-%% 读取处理过的信号
-load('outer_data2.mat');
+%% 读取处理过的信号 outer_data4/6/8信号质量不错 从outer_data3开始时4000点信号
+load('outer_data4.mat');
 
 %%
 
@@ -73,7 +77,7 @@ ylim([0,0.15]);
 
 maxErr=1e-4;
 maxIter=100;
-window=400;
+window=500;
 
 lamda=0.06;
 
