@@ -40,7 +40,7 @@ load('Dic_outer.mat');
 % original_signal=original_signal+noise;
 
 %% 读取处理过的信号 outer_data4/6/8信号质量不错 从outer_data3开始时4000点信号
-load('outer_data4.mat');
+load('outer_data8.mat');
 
 %%
 
@@ -79,7 +79,7 @@ maxErr=1e-4;
 maxIter=100;
 window=500;
 
-lamda=0.06;
+lamda=0.1;
 
 %% IST信号重构
 
