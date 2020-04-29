@@ -57,7 +57,7 @@ f_max=2255;
 zeta_min=0.119;
 zeta_max=0.122;
 W_step=1;
-[Dic,rows,cols]=dic(length,f_min,f_max,zeta_min,zeta_max,W_step,fs);
+[Dic,rows,cols]=generate_dic(length,f_min,f_max,zeta_min,zeta_max,W_step,fs);
 Dic=dictnormalize(Dic);
 %% 分段进行信号重构
 

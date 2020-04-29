@@ -7,15 +7,15 @@ fs=10240;   %采样频率，手动设置
 total_t=0.5;   %采样时间   可以自己设定
 total_N=fs*total_t;   %总采样点数
 point_N=1:total_N;   %采样点数
-bias_t=fs*0;    % 时间偏移   10, 10.5
+bias_t=fs*2.5;    % 时间偏移   10, 10.5
 t=point_N/fs;   %时间
 
 %% 构造字典
 %外圈信号，原子震荡频率2250，阻尼比0.12
 %内圈信号，原子震荡频率1272，阻尼比0.17
-
-% f_min=2247;          %内圈，原子震荡频率1272
-% f_max=2253;
+% 
+% f_min=2245;          %内圈，原子震荡频率1272
+% f_max=2255;
 % zeta_min=0.119;
 % zeta_max=0.122;
 % W_step=2;
@@ -29,18 +29,25 @@ load('Dic_outer2.mat');
 
 %% 读取数据
 
-load '深沟球外圈1x0.5加载通道4.mat';%
-original_signal=Data(point_N+bias_t);
+% load '深沟球外圈1x0.5加载通道4.mat';
+% original_signal=Data(point_N+bias_t);
+% 
+% % 原始信号幅值归一化
+% original_signal=original_signal/abs(max(original_signal));
+% 
+% 
+% % 加点随机噪声看看
+% amplitude_noise=0.7;
+% noise=amplitude_noise*randn(total_N,1);
+% original_signal=original_signal+noise;
 
-% 原始信号幅值归一化
-original_signal=original_signal/abs(max(original_signal));
-
-
-% 加点随机噪声看看
-amplitude_noise=0.7;
-noise=amplitude_noise*randn(total_N,1);
-original_signal=original_signal+noise;
-
+%% 读取处理过的信号
+load 'outer2_data3.mat';
+% 
+% % 加点随机噪声看看
+% amplitude_noise=0.2;
+% noise=amplitude_noise*randn(total_N,1);
+% original_signal=original_signal+noise;
 
 %% 原始信号
 
@@ -75,9 +82,9 @@ ylim([0,0.15]);
 
 maxErr=1e-4;
 maxIter=100;
-window=500;
+window=700;     % 这个参数至关重要
 
-lamda=0.1;
+lamda=0.12;
 
 %% IST信号重构
 
